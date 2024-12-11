@@ -1,19 +1,21 @@
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { Table, TableBody } from "@/components/ui/table";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useState, useEffect, useContext } from "react";
 import { BlogTableContext } from "./App";
+import Blog from "./Blog";
 
 export function BlogTable() {
   // blog object types
   type BlogType = {
-    number: string;
+    _id: string;
     title: string;
     date: string;
   };
 
   // save in variable then...
+  // this will be moved to a master component
   const blogTableContext = useContext(BlogTableContext);
 
   // check to see if null -> by doing this, typescript will not complain!
@@ -59,16 +61,11 @@ export function BlogTable() {
         <ScrollArea className="h-60 rounded-md">
           <TableBody>
             {blog.map((blog: BlogType) => (
-              <TableRow key={blog.number}>
-                <TableCell>
-                  <Button className="font-bold text-base p-0" variant="link">
-                    {blog.title}
-                  </Button>
-                </TableCell>
-                <TableCell className="flex text-right items-center">
-                  {blog.date}
-                </TableCell>
-              </TableRow>
+              <Blog
+                idNumber={blog._id}
+                title={blog.title}
+                date={blog.date}
+              ></Blog>
             ))}
           </TableBody>
         </ScrollArea>

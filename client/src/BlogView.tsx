@@ -1,31 +1,20 @@
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { useContext, useState } from "react";
-import { BlogTableContext } from "./App";
+import { useContext, useEffect, useState } from "react";
+import { BlogIDContext } from "./App";
 
 export function BlogView() {
-  const blogTableContext = useContext(BlogTableContext);
+  const blogIDContext = useContext(BlogIDContext);
 
-  // check to see if null -> by doing this, typescript will not complain!
-  if (!blogTableContext) {
+  if (!blogIDContext) {
     throw new Error(
-      "BlogTableContext must be used within a BlogTableContext.Provider"
+      "BlogIDContext must be used within a BlogIDContext.Provider"
     );
   }
 
-  // first, on click of blog, send blog id to this component
-  // then once that click is made, take blog id and perform a get request with the specific id
-  // store data in variable and extract it in the component to view title, date and content
+  const { blogID, setBlogID } = blogIDContext;
 
-  const { setTableState } = blogTableContext;
-
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-
-  const [blogInfo, setBlogInfo] = useState({
-    title: "",
-    content: "",
-  });
+  const [blogData, setBlogData] = useState({});
 
   //   setFormError({
   //     ...formError,
@@ -35,25 +24,25 @@ export function BlogView() {
   //     },
 
   const handlePublish = () => {
-    const blogInfo = { title, content };
-
-    fetch("http://localhost:3000/api/blog/add", {
-      method: "POST",
+    fetch(`http://localhost:3000/api/blog/${blogID}`, {
+      method: "GET",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(blogInfo),
     })
       .then((response) => {
-        if (response.status === 201) {
-          setTableState(true);
-          setTitle("");
-          setContent("");
-          console.log("New entry ereated!");
+        if (!response.ok) {
+          throw new Error("Network response was not ok.");
         }
+        return response.json(); // lets us access only the response jsons we want
+      })
+      .then((data) => {
+        setBlogData({ ...data });
       })
       .catch((err) => {
         console.log(`This is the ERROR: ${err}`);
       });
   };
+
+  useEffect(() => {}, [blogID, setBlogID]);
 
   return (
     <Card className="px-4">

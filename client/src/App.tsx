@@ -14,6 +14,11 @@ type BlogViewContextType = {
   setViewState: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+type BlogIDContextType = {
+  blogID: string;
+  setBlogID: React.Dispatch<React.SetStateAction<string>>;
+};
+
 // BlogTableContext gets passed two parameters, tableState and setTableState
 // the types for both of these need to be accounted for which is why I declare their types
 export const BlogTableContext = createContext<BlogTableContextType | null>(
@@ -22,18 +27,23 @@ export const BlogTableContext = createContext<BlogTableContextType | null>(
 
 export const BlogViewContext = createContext<BlogViewContextType | null>(null);
 
+export const BlogIDContext = createContext<BlogIDContextType | null>(null);
+
 function App() {
   const [tableState, setTableState] = useState<boolean>(false);
   const [viewState, setViewState] = useState<boolean>(false);
+  const [blogID, setBlogID] = useState<string>("");
 
   return (
     <BlogTableContext.Provider value={{ tableState, setTableState }}>
       <BlogViewContext.Provider value={{ viewState, setViewState }}>
-        <div className="flex gap-6">
-          <BlogTable></BlogTable>
-          <BlogAdd></BlogAdd>
-          <BlogView></BlogView>
-        </div>
+        <BlogIDContext.Provider value={{ blogID, setBlogID }}>
+          <div className="flex gap-6">
+            <BlogTable></BlogTable>
+            <BlogAdd></BlogAdd>
+            <BlogView></BlogView>
+          </div>
+        </BlogIDContext.Provider>
       </BlogViewContext.Provider>
     </BlogTableContext.Provider>
   );
