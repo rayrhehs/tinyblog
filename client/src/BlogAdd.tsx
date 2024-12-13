@@ -68,7 +68,7 @@ export function BlogAdd() {
           <Label htmlFor="message">Title</Label>
           <Textarea
             placeholder="Write your title here."
-            className="flex min-h-[45px] h-[45px] max-h-[145px]"
+            className="flex min-h-[45px] h-[45px] resize-none px-4"
             id="message"
             value={blogData.title}
             onChange={updateBlogTitle}
@@ -78,7 +78,7 @@ export function BlogAdd() {
           <Label htmlFor="message">Content</Label>
           <Textarea
             placeholder="Write your blog here."
-            className="flex max-h-[145px]"
+            className="flex h-64 resize-none p-4"
             id="message"
             value={blogData.content}
             onChange={updateBlogContent}

@@ -1,4 +1,5 @@
 import { createContext, useState } from "react";
+import { motion } from "motion/react";
 
 import BlogTable from "./BlogTable.tsx";
 import BlogAdd from "./BlogAdd.tsx";
@@ -24,10 +25,10 @@ type BlogIDContextType = {
 export const BlogTableContext = createContext<BlogTableContextType | null>(
   null
 );
-
 export const BlogViewContext = createContext<BlogViewContextType | null>(null);
-
 export const BlogIDContext = createContext<BlogIDContextType | null>(null);
+
+const MotionBlogTable = motion.create(BlogTable);
 
 function App() {
   const [tableState, setTableState] = useState<boolean>(false);
@@ -39,9 +40,10 @@ function App() {
       <BlogViewContext.Provider value={{ viewState, setViewState }}>
         <BlogIDContext.Provider value={{ blogID, setBlogID }}>
           <div className="flex gap-6">
+            <MotionBlogTable initial={{ scale: 0 }} animate={{ scale: 1 }} />
             <BlogTable></BlogTable>
-            <BlogAdd></BlogAdd>
-            <BlogView></BlogView>
+            {/* <BlogAdd></BlogAdd>
+            <BlogView></BlogView> */}
           </div>
         </BlogIDContext.Provider>
       </BlogViewContext.Provider>

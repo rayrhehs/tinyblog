@@ -4,6 +4,19 @@ export default {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      width: {
+        112: "28rem",
+        128: "32rem",
+        160: "40rem",
+        176: "44rem",
+        192: "48rem",
+      },
+      height: {
+        128: "32rem",
+        160: "40rem",
+        176: "44rem",
+        192: "48rem",
+      },
       maxHeight: {
         128: "32rem",
       },

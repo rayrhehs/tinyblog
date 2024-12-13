@@ -1,9 +1,18 @@
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useContext, useEffect, useState } from "react";
 import { BlogIDContext } from "./App";
 
 export function BlogView() {
+  // blog object types
+  type BlogType = {
+    // question mark means its optional AKA it can wait to be populated later
+    title?: string;
+    date?: string;
+    content?: string;
+  };
+
   const blogIDContext = useContext(BlogIDContext);
 
   if (!blogIDContext) {
@@ -14,7 +23,7 @@ export function BlogView() {
 
   const { blogID, setBlogID } = blogIDContext;
 
-  const [blogData, setBlogData] = useState({});
+  const [blogData, setBlogData] = useState<BlogType>({});
 
   //   setFormError({
   //     ...formError,
@@ -23,7 +32,7 @@ export function BlogView() {
   //       hasError: true,
   //     },
 
-  const handlePublish = () => {
+  const handleView = () => {
     fetch(`http://localhost:3000/api/blog/${blogID}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
@@ -35,27 +44,34 @@ export function BlogView() {
         return response.json(); // lets us access only the response jsons we want
       })
       .then((data) => {
-        setBlogData({ ...data });
+        console.log(data);
+        setBlogData(data);
       })
       .catch((err) => {
         console.log(`This is the ERROR: ${err}`);
       });
   };
 
-  useEffect(() => {}, [blogID, setBlogID]);
+  useEffect(() => {
+    handleView();
+  }, [blogID, setBlogID]);
 
   return (
     <Card className="px-4">
       <div>
-        <h1 className="text-left px-2 text-3xl font-bold text-totalblue mb-4"></h1>
+        <h1 className="text-left px-2 text-3xl font-bold text-totalblue mb-4">
+          {blogData.title}
+        </h1>
       </div>
-      <div className="px-2 text-totalblue flex flex-col gap-3">
+      <div className="px-2 text-totalblue flex flex-col gap-3 h-72">
         <div className="text-left flex flex-col gap-2">
-          <Label htmlFor="message">INSERT DATE</Label>
+          <Label htmlFor="message">{blogData.date}</Label>
         </div>
-        <div className="text-left flex flex-col gap-2">
-          <p>HELLO HELLO HELLO</p>
-        </div>
+        <ScrollArea className="h-max rounded-md">
+          <div className="text-left flex flex-col gap-2">
+            <p>{blogData.content}</p>
+          </div>
+        </ScrollArea>
       </div>
     </Card>
   );

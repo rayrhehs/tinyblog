@@ -50,7 +50,7 @@ export function BlogTable() {
   }, [tableState, setTableState]);
 
   return (
-    <Card>
+    <Card className="px-4">
       <div className="flex justify-between content-end text-totalblue mb-2">
         <h1 className="px-4 text-3xl font-bold">Personal Blog</h1>
         <Button className="text-xl font-bold pb-0 items-start" variant="link">
