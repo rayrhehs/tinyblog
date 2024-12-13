@@ -1,6 +1,4 @@
 import { createContext, useState } from "react";
-import { motion } from "motion/react";
-
 import BlogTable from "./BlogTable.tsx";
 import BlogAdd from "./BlogAdd.tsx";
 import BlogView from "./BlogView.tsx";
@@ -20,6 +18,11 @@ type BlogIDContextType = {
   setBlogID: React.Dispatch<React.SetStateAction<string>>;
 };
 
+type BlogAddModalContextType = {
+  addOpen: boolean;
+  setAddOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
 // BlogTableContext gets passed two parameters, tableState and setTableState
 // the types for both of these need to be accounted for which is why I declare their types
 export const BlogTableContext = createContext<BlogTableContextType | null>(
@@ -27,27 +30,30 @@ export const BlogTableContext = createContext<BlogTableContextType | null>(
 );
 export const BlogViewContext = createContext<BlogViewContextType | null>(null);
 export const BlogIDContext = createContext<BlogIDContextType | null>(null);
-
-const MotionBlogTable = motion.create(BlogTable);
+export const BlogAddModalContext =
+  createContext<BlogAddModalContextType | null>(null);
 
 function App() {
   const [tableState, setTableState] = useState<boolean>(false);
   const [viewState, setViewState] = useState<boolean>(false);
   const [blogID, setBlogID] = useState<string>("");
+  const [addOpen, setAddOpen] = useState(false);
 
   return (
-    <BlogTableContext.Provider value={{ tableState, setTableState }}>
-      <BlogViewContext.Provider value={{ viewState, setViewState }}>
-        <BlogIDContext.Provider value={{ blogID, setBlogID }}>
-          <div className="flex gap-6">
-            <MotionBlogTable initial={{ scale: 0 }} animate={{ scale: 1 }} />
-            <BlogTable></BlogTable>
-            {/* <BlogAdd></BlogAdd>
-            <BlogView></BlogView> */}
-          </div>
-        </BlogIDContext.Provider>
-      </BlogViewContext.Provider>
-    </BlogTableContext.Provider>
+    <BlogAddModalContext.Provider value={{ addOpen, setAddOpen }}>
+      <BlogTableContext.Provider value={{ tableState, setTableState }}>
+        <BlogViewContext.Provider value={{ viewState, setViewState }}>
+          <BlogIDContext.Provider value={{ blogID, setBlogID }}>
+            <div className="flex gap-6">
+              <BlogTable></BlogTable>
+              {addOpen ? <BlogAdd></BlogAdd> : null}
+              {/* <BlogAdd></BlogAdd> */}
+              {/* <BlogView></BlogView> */}
+            </div>
+          </BlogIDContext.Provider>
+        </BlogViewContext.Provider>
+      </BlogTableContext.Provider>
+    </BlogAddModalContext.Provider>
   );
 }
 
