@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "./components/ui/button";
 import { useContext, useState } from "react";
 import { BlogTableContext, BlogAddModalContext } from "./App";
-import { AnimatePresence, motion } from "motion/react";
+import { motion } from "motion/react";
 
 export const BlogAdd = motion(function BlogAdd() {
   // add this in during home button

@@ -3,8 +3,9 @@ import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useContext, useEffect, useState } from "react";
 import { BlogIDContext } from "./App";
+import { motion } from "motion/react";
 
-export function BlogView() {
+export const BlogView = motion(function BlogView() {
   // blog object types
   type BlogType = {
     // question mark means its optional AKA it can wait to be populated later
@@ -57,24 +58,36 @@ export function BlogView() {
   }, [blogID, setBlogID]);
 
   return (
-    <Card className="px-4">
-      <div>
-        <h1 className="text-left px-2 text-3xl font-bold text-totalblue mb-4">
-          {blogData.title}
-        </h1>
-      </div>
-      <div className="px-2 text-totalblue flex flex-col gap-3 h-72">
-        <div className="text-left flex flex-col gap-2">
-          <Label htmlFor="message">{blogData.date}</Label>
+    <motion.div
+      initial={{ x: "100%", opacity: 1, filter: "blur(0px)" }}
+      animate={{ x: 0, opacity: 1, filter: "blur(0px)" }}
+      exit={{ x: "100%", opacity: 0, filter: "blur(1px)" }} // Blur while fading out
+      transition={{
+        x: { duration: 0.35 },
+        opacity: { duration: 0.7 },
+        filter: { duration: 0.5 },
+      }}
+      className={"absolute"}
+    >
+      <Card className="px-4">
+        <div>
+          <h1 className="text-left px-2 text-3xl font-bold text-totalblue mb-4">
+            {blogData.title}
+          </h1>
         </div>
-        <ScrollArea className="h-max rounded-md">
+        <div className="px-2 text-totalblue flex flex-col gap-3 h-72">
           <div className="text-left flex flex-col gap-2">
-            <p>{blogData.content}</p>
+            <Label htmlFor="message">{blogData.date}</Label>
           </div>
-        </ScrollArea>
-      </div>
-    </Card>
+          <ScrollArea className="h-max rounded-md">
+            <div className="text-left flex flex-col gap-2">
+              <p>{blogData.content}</p>
+            </div>
+          </ScrollArea>
+        </div>
+      </Card>
+    </motion.div>
   );
-}
+});
 
 export default BlogView;

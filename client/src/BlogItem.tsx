@@ -1,7 +1,7 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { useContext } from "react";
-import { BlogIDContext } from "./App";
+import { BlogIDContext, BlogViewModalContext } from "./App";
 
 // declare types of props
 type BlogProps = {
@@ -13,6 +13,7 @@ type BlogProps = {
 // use BlogProps to define types
 export function Blog({ idNumber, title, date }: BlogProps) {
   const blogIDContext = useContext(BlogIDContext);
+  const viewOpenContext = useContext(BlogViewModalContext);
 
   if (!blogIDContext) {
     throw new Error(
@@ -20,9 +21,17 @@ export function Blog({ idNumber, title, date }: BlogProps) {
     );
   }
 
+  if (!viewOpenContext) {
+    throw new Error(
+      "BlogViewOpenContext must be used within a BlogViewOpenContext.Provider"
+    );
+  }
+
   const { setBlogID } = blogIDContext;
+  const { setViewOpen } = viewOpenContext;
   const handleBlogClick = () => {
     setBlogID(idNumber);
+    setViewOpen(true);
   };
 
   // on clicking the button, we update blogIDContext
