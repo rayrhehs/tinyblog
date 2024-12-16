@@ -2,6 +2,7 @@ import { createContext, useState } from "react";
 import BlogTable from "./BlogTable.tsx";
 import BlogAdd from "./BlogAdd.tsx";
 import BlogView from "./BlogView.tsx";
+import { AnimatePresence } from "motion/react";
 
 type BlogTableContextType = {
   tableState: boolean;
@@ -46,7 +47,9 @@ function App() {
           <BlogIDContext.Provider value={{ blogID, setBlogID }}>
             <div className="flex gap-6">
               <BlogTable></BlogTable>
-              {addOpen ? <BlogAdd></BlogAdd> : null}
+              <AnimatePresence>
+                {addOpen ? <BlogAdd></BlogAdd> : null}
+              </AnimatePresence>
               {/* <BlogAdd></BlogAdd> */}
               {/* <BlogView></BlogView> */}
             </div>

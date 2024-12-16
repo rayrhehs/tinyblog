@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "./components/ui/button";
 import { useContext, useState } from "react";
 import { BlogTableContext, BlogAddModalContext } from "./App";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 
 export const BlogAdd = motion(function BlogAdd() {
   // add this in during home button
@@ -70,11 +70,15 @@ export const BlogAdd = motion(function BlogAdd() {
 
   return (
     <motion.div
-      initial={{ x: "100%", opacity: 1 }} // Start off-screen to the right
-      animate={{ x: 0, opacity: 1 }} // Slide into position
-      exit={{ x: "100%", opacity: 0 }} // Slide out to the right when unmounting
-      transition={{ type: "linear", stiffness: 50, damping: 10 }} // Smooth spring-like motion
-      className="absolute"
+      initial={{ x: "100%", opacity: 1, filter: "blur(0px)" }}
+      animate={{ x: 0, opacity: 1, filter: "blur(0px)" }}
+      exit={{ x: "100%", opacity: 0, filter: "blur(1px)" }} // Blur while fading out
+      transition={{
+        x: { duration: 0.35 },
+        opacity: { duration: 0.7 },
+        filter: { duration: 0.5 },
+      }}
+      className={"absolute"}
     >
       <Card className="px-4">
         <div>

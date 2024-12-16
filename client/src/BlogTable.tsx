@@ -65,10 +65,17 @@ export const BlogTable = motion(function BlogTable() {
 
   return (
     <motion.div
-      initial={{ x: "100%", opacity: 0 }} // Start off-screen to the right
-      animate={{ x: 0, opacity: 1 }} // Slide into position
-      exit={{ x: "100%", opacity: 0 }} // Slide out to the right when unmounting
-      transition={{ type: "linear", stiffness: 50, damping: 10 }} // Smooth spring-like motion
+      initial={{ x: 0, opacity: 1, scale: 0.8 }} // Start off-screen and smaller
+      animate={{ x: 0, opacity: 1, scale: 1 }} // Scale up to normal size when mounting
+      exit={{ x: 0, opacity: 1, scale: 0.8 }} // Scale down when exiting
+      transition={{
+        type: "linear",
+        stiffness: 50,
+        damping: 10,
+        x: { duration: 0.35 }, // Slide duration
+        opacity: { duration: 1 }, // Fade duration
+        scale: { duration: 0.35, delay: 0.5 }, // Scale duration
+      }} // Smooth spring-like motion for sliding and fading
     >
       <Card className="px-4">
         <div className="flex justify-between content-end text-totalblue mb-2">
