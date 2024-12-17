@@ -6,6 +6,8 @@ import { useContext, useState } from "react";
 import { BlogTableContext, BlogAddModalContext } from "./App";
 import { motion } from "motion/react";
 
+const MAX_CHARS = 250;
+
 export const BlogAdd = motion(function BlogAdd() {
   // add this in during home button
   const blogTableContext = useContext(BlogTableContext);
@@ -40,11 +42,18 @@ export const BlogAdd = motion(function BlogAdd() {
   };
 
   const updateBlogContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setBlogData({
-      ...blogData,
-      content: e.target.value,
-    });
+    const newText = e.target.value;
+    if (newText.length <= MAX_CHARS) {
+      setBlogData({
+        ...blogData,
+        content: newText,
+      });
+    }
   };
+
+  const remainingChars = MAX_CHARS - blogData.content.length;
+  const isNearLimit = remainingChars <= 20;
+  const isAtLimit = remainingChars === 0;
 
   const handlePublish = () => {
     const submitBlogData = { title: blogData.title, content: blogData.content };
@@ -105,10 +114,14 @@ export const BlogAdd = motion(function BlogAdd() {
               id="message"
               value={blogData.content}
               onChange={updateBlogContent}
+              maxLength={MAX_CHARS}
             />
           </div>
         </div>
-        <div className="px-2 py-4 flex justify-start">
+        <div className="px-2 py-4 flex justify-end gap-x-3">
+          <Label className="text-totalblue text-md font-semibold self-center">
+            {remainingChars}
+          </Label>
           <Button variant="outline" onClick={handlePublish}>
             <b>Publish</b>
           </Button>
