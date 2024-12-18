@@ -52,8 +52,6 @@ export const BlogAdd = motion(function BlogAdd() {
   };
 
   const remainingChars = MAX_CHARS - blogData.content.length;
-  const isNearLimit = remainingChars <= 20;
-  const isAtLimit = remainingChars === 0;
 
   const handlePublish = () => {
     const submitBlogData = { title: blogData.title, content: blogData.content };

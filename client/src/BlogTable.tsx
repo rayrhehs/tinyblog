@@ -88,8 +88,8 @@ export const BlogTable = motion(function BlogTable() {
             +Add
           </Button>
         </div>
-        <Table className="px-0">
-          <ScrollArea className="h-60 rounded-md">
+        <ScrollArea className="w-full h-104 rounded-md">
+          <Table className="w-full px-0">
             <TableBody>
               {blog.map((blog: BlogType) => (
                 <Blog
@@ -99,8 +99,8 @@ export const BlogTable = motion(function BlogTable() {
                 ></Blog>
               ))}
             </TableBody>
-          </ScrollArea>
-        </Table>
+          </Table>
+        </ScrollArea>
       </Card>
     </motion.div>
   );

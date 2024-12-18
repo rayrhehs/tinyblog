@@ -5,6 +5,7 @@ export default {
   theme: {
     extend: {
       width: {
+        104: "26rem",
         112: "28rem",
         128: "32rem",
         160: "40rem",
@@ -12,6 +13,7 @@ export default {
         192: "48rem",
       },
       height: {
+        104: "26rem",
         128: "32rem",
         160: "40rem",
         176: "44rem",

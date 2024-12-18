@@ -38,17 +38,22 @@ export function Blog({ idNumber, title, date }: BlogProps) {
   // the blogView useEffect monitors blogIDContext and if it changes, runs the route to get blog info
 
   return (
-    <TableRow key={idNumber}>
-      <TableCell>
+    <TableRow
+      key={idNumber}
+      className="w-full flex justify-between items-center p-0"
+    >
+      <TableCell className="pl-2">
         <Button
-          className="font-bold text-base p-0"
+          className="font-bold text-xl p-0"
           variant="link"
           onClick={handleBlogClick}
         >
           {title}
         </Button>
       </TableCell>
-      <TableCell className="flex text-right items-center">{date}</TableCell>
+      <TableCell className="flex text-right text-xl items-center">
+        {date}
+      </TableCell>
     </TableRow>
   );
 }
