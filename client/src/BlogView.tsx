@@ -61,10 +61,11 @@ export const BlogView = motion(function BlogView() {
     <motion.div
       initial={{ x: "100%", opacity: 1, filter: "blur(0px)" }}
       animate={{ x: 0, opacity: 1, filter: "blur(0px)" }}
-      exit={{ x: "100%", opacity: 0, filter: "blur(1px)" }} // Blur while fading out
+      exit={{ y: "-100%", opacity: 0, filter: "blur(1px)" }} // Blur while fading out
       transition={{
         x: { duration: 0.35 },
-        opacity: { duration: 0.7 },
+        y: { duration: 0.2 },
+        opacity: { duration: 0.2 },
         filter: { duration: 0.5 },
       }}
       className={"absolute"}

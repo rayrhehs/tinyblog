@@ -42,9 +42,13 @@ export function Blog({ idNumber, title, date }: BlogProps) {
       key={idNumber}
       className="w-full flex justify-between items-center p-0"
     >
-      <TableCell className="pl-2">
+      <TableCell className="pl-2 max-w-60 overflow-hidden">
         <Button
-          className="font-bold text-xl p-0"
+          className={
+            title.length > 20
+              ? "font-bold text-xl p-0 transition-transform duration-500 hover:-translate-x-8"
+              : "font-bold text-xl p-0"
+          }
           variant="link"
           onClick={handleBlogClick}
         >

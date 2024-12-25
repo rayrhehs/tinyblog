@@ -88,19 +88,22 @@ export const BlogTable = motion(function BlogTable() {
             +Add
           </Button>
         </div>
-        <ScrollArea className="w-full h-104 rounded-md">
-          <Table className="w-full px-0">
-            <TableBody>
-              {blog.map((blog: BlogType) => (
-                <Blog
-                  idNumber={blog._id}
-                  title={blog.title}
-                  date={blog.date}
-                ></Blog>
-              ))}
-            </TableBody>
-          </Table>
-        </ScrollArea>
+        <div className="relative w-full h-104 rounded-md">
+          <ScrollArea className="w-full h-full">
+            <Table className="w-full px-0">
+              <TableBody>
+                {blog.map((blog: BlogType) => (
+                  <Blog
+                    idNumber={blog._id}
+                    title={blog.title}
+                    date={blog.date}
+                  ></Blog>
+                ))}
+              </TableBody>
+            </Table>
+          </ScrollArea>
+          <div className="absolute bottom-0 left-0 right-0 h-12 pointer-events-none bg-gradient-to-t from-white via-white/90 to-transparent"></div>
+        </div>
       </Card>
     </motion.div>
   );

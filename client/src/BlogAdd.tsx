@@ -102,6 +102,7 @@ export const BlogAdd = motion(function BlogAdd() {
               id="message"
               value={blogData.title}
               onChange={updateBlogTitle}
+              maxLength={30}
             />
           </div>
           <div className="text-left flex flex-col gap-2">

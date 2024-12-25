@@ -57,7 +57,7 @@ function App() {
           <BlogViewContext.Provider value={{ viewState, setViewState }}>
             <BlogIDContext.Provider value={{ blogID, setBlogID }}>
               <HomeButton></HomeButton>
-              <div className="flex gap-6">
+              <div className="flex flex-col gap-6">
                 <BlogTable></BlogTable>
                 <AnimatePresence>
                   {addOpen ? <BlogAdd></BlogAdd> : null}
