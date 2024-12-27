@@ -1,20 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { useContext } from "react";
-import { BlogViewModalContext } from "./App";
+import { AdminModeContext } from "./App";
 import { motion } from "motion/react";
 
-export const HomeButton = motion(function HomeButton() {
-  const viewOpenContext = useContext(BlogViewModalContext);
+export const AdminButton = motion(function AdminButton() {
+  const adminModeContext = useContext(AdminModeContext);
 
-  if (!viewOpenContext) {
+  if (!adminModeContext) {
     throw new Error(
-      "BlogViewOpenContext must be used within a BlogViewOpenContext.Provider"
+      "AdminModeContext must be used within a AdminModeContext.Provider"
     );
   }
 
-  const { setViewOpen } = viewOpenContext;
-  const handleHomeClick = () => {
-    setViewOpen(false);
+  const { adminMode, setAdminMode } = adminModeContext;
+  const handleAdminModeClick = () => {
+    setAdminMode((prevAdminMode) => !prevAdminMode);
   };
 
   return (
@@ -32,25 +32,16 @@ export const HomeButton = motion(function HomeButton() {
       }} // Smooth spring-like motion for sliding and fading
     >
       <Button
-        onClick={handleHomeClick}
+        onClick={handleAdminModeClick}
         variant={"outline"}
-        className="px-2 rounded-small mb-4"
+        className="px-2 rounded-small mt-4"
       >
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="m18 15-6-6-6 6" />
-        </svg>
+        <p className="text-base font-medium">
+          {adminMode ? "Admin Mode: ON" : "Admin Mode: OFF"}
+        </p>
       </Button>
     </motion.div>
   );
 });
 
-export default HomeButton;
+export default AdminButton;
