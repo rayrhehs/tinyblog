@@ -6,6 +6,7 @@ import { useState, useEffect, useContext } from "react";
 import { BlogTableContext, BlogAddModalContext } from "./App";
 import Blog from "./BlogItem";
 import { motion } from "motion/react";
+import useScrollBottom from "./hooks/useScrollBottom";
 
 export const BlogTable = motion(function BlogTable() {
   // blog object types
@@ -63,6 +64,8 @@ export const BlogTable = motion(function BlogTable() {
     setAddOpen(true);
   };
 
+  const isBottom = useScrollBottom(20); // 20px threshold
+
   return (
     <motion.div
       initial={{ x: 0, opacity: 1, scale: 0.8 }} // Start off-screen and smaller
@@ -102,7 +105,9 @@ export const BlogTable = motion(function BlogTable() {
               </TableBody>
             </Table>
           </ScrollArea>
-          <div className="absolute bottom-0 left-0 right-0 h-12 pointer-events-none bg-gradient-to-t from-white via-white/90 to-transparent"></div>
+          {!isBottom ? (
+            <div className="absolute bottom-0 left-0 right-0 h-12 pointer-events-none bg-gradient-to-t from-white via-white/90 to-transparent"></div>
+          ) : null}
         </div>
       </Card>
     </motion.div>
