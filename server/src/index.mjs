@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import { mockBlogs } from "./utils/constants.mjs";
 import { Blog } from "./mongoose/schemas/blog.mjs";
 import mongoose from "mongoose";
 
@@ -28,12 +27,27 @@ app.get("/api/blog/home", async (request, response) => {
     .catch((err) => response.json(err));
 });
 
+app.get("/api/blog/:id", async (request, response) => {
+  const {
+    params: { id },
+  } = request;
+
+  // findById is a promise, so await is necessary to use it
+  const blogData = await Blog.findById(id);
+
+  if (!blogData) {
+    return response.sendStatus(404);
+  }
+
+  return response.send(blogData);
+});
+
 // add entries to database
 app.post("/api/blog/add", async (request, response) => {
   // destructure body from request
   const { body } = request;
   const data = body;
-  // create date
+  // create date and format
   const currentDay = new Date().toISOString().split("T")[0];
 
   // generate blog date
