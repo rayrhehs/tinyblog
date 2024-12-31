@@ -58,6 +58,25 @@ app.delete("/api/blog/:id", async (request, response) => {
   return response.sendStatus(200);
 });
 
+app.patch("/api/blog/:id", async (request, response) => {
+  const {
+    body: { title, date, content },
+    params: { id },
+  } = request;
+
+  // create new blog object with updated content
+  const updatedBlog = { title, date, content };
+
+  // find by id and update with updatedBlog
+  const blogUpdater = await Blog.findByIdAndUpdate(id, updatedBlog);
+
+  if (!blogUpdater) {
+    return response.sendStatus(400);
+  }
+
+  return response.sendStatus(200);
+});
+
 // add entries to database
 app.post("/api/blog/add", async (request, response) => {
   // destructure body from request
