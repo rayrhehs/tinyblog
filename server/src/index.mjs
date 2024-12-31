@@ -42,6 +42,22 @@ app.get("/api/blog/:id", async (request, response) => {
   return response.send(blogData);
 });
 
+app.delete("/api/blog/:id", async (request, response) => {
+  const {
+    params: { id },
+  } = request;
+
+  // refer to mongoDB created id as _id
+  const deleteBlog = await Blog.deleteOne({ _id: id });
+
+  if (!deleteBlog) {
+    return response.sendStatus(404);
+  }
+
+  console.log("Entry deleted");
+  return response.sendStatus(200);
+});
+
 // add entries to database
 app.post("/api/blog/add", async (request, response) => {
   // destructure body from request
