@@ -1,7 +1,8 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { useContext } from "react";
-import { BlogIDContext, BlogViewModalContext } from "./App";
+import { AdminModeContext, BlogIDContext, BlogViewModalContext } from "./App";
+import BlogItemButtons from "./BlogItemButtons";
 
 // declare types of props
 type BlogProps = {
@@ -14,6 +15,7 @@ type BlogProps = {
 export function Blog({ idNumber, title, date }: BlogProps) {
   const blogIDContext = useContext(BlogIDContext);
   const viewOpenContext = useContext(BlogViewModalContext);
+  const adminModeContext = useContext(AdminModeContext);
 
   if (!blogIDContext) {
     throw new Error(
@@ -27,12 +29,19 @@ export function Blog({ idNumber, title, date }: BlogProps) {
     );
   }
 
+  if (!adminModeContext) {
+    throw new Error(
+      "AdminModeContext must be used within a AdminModeContext.Provider"
+    );
+  }
+
   const { setBlogID } = blogIDContext;
   const { setViewOpen } = viewOpenContext;
   const handleBlogClick = () => {
     setBlogID(idNumber);
     setViewOpen(true);
   };
+  const { adminMode } = adminModeContext;
 
   // on clicking the button, we update blogIDContext
   // the blogView useEffect monitors blogIDContext and if it changes, runs the route to get blog info
@@ -56,7 +65,11 @@ export function Blog({ idNumber, title, date }: BlogProps) {
         </Button>
       </TableCell>
       <TableCell className="flex text-right text-xl items-center">
-        {date}
+        {adminMode ? (
+          <BlogItemButtons blogID={idNumber}></BlogItemButtons>
+        ) : (
+          date
+        )}
       </TableCell>
     </TableRow>
   );

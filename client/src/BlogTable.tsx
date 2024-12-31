@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useState, useEffect, useContext } from "react";
-import { BlogTableContext, BlogAddModalContext } from "./App";
+import { BlogTableContext, BlogAddModalContext, AdminModeContext } from "./App";
 import Blog from "./BlogItem";
 import { motion } from "motion/react";
 import useScrollBottom from "./hooks/useScrollBottom";
@@ -20,6 +20,7 @@ export const BlogTable = motion(function BlogTable() {
   // this will be moved to a master component
   const blogTableContext = useContext(BlogTableContext);
   const blogAddModalContext = useContext(BlogAddModalContext);
+  const adminModeContext = useContext(AdminModeContext);
 
   // check to see if null -> by doing this, typescript will not complain!
   if (!blogTableContext) {
@@ -35,8 +36,15 @@ export const BlogTable = motion(function BlogTable() {
     );
   }
 
+  if (!adminModeContext) {
+    throw new Error(
+      "AdminModeContext must be used within a AdminModeContext.Provider"
+    );
+  }
+
   const { tableState, setTableState } = blogTableContext;
   const { setAddOpen } = blogAddModalContext;
+  // const { adminMode, setAdminMode } = adminModeContext;
 
   const [blog, setBlog] = useState([]);
 

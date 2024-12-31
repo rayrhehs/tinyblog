@@ -33,7 +33,7 @@ export const AdminButton = motion(function AdminButton() {
     >
       <Button
         onClick={handleAdminModeClick}
-        variant={"outline"}
+        variant={adminMode ? "outlineInverse" : "outline"}
         className="px-2 rounded-small mt-4"
       >
         <p className="text-base font-medium">

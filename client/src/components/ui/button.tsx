@@ -14,6 +14,8 @@ const buttonVariants = cva(
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
           "rounded-xl px-2 py-4 border-3 border-totalblue text-totalblue bg-background hover:bg-totalblue hover:text-white",
+        outlineInverse:
+          "rounded-xl px-2 py-4 border-3 border-white text-white bg-totalblue hover:bg-white hover:text-totalblue",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
