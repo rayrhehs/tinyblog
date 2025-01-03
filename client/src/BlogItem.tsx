@@ -66,7 +66,7 @@ export function Blog({ idNumber, title, date }: BlogProps) {
       </TableCell>
       <TableCell className="flex text-right text-xl items-center">
         {adminMode ? (
-          <BlogItemButtons blogID={idNumber}></BlogItemButtons>
+          <BlogItemButtons blogIDCurrent={idNumber}></BlogItemButtons>
         ) : (
           date
         )}

@@ -1,9 +1,11 @@
 import { useContext } from "react";
-import { BlogTableContext } from "./App";
+import { BlogIDContext, BlogTableContext, EditModeContext } from "./App";
 import { Button } from "./components/ui/button";
 
-function BlogItemButtons({ blogID }: { blogID: string }) {
+function BlogItemButtons({ blogIDCurrent }: { blogIDCurrent: string }) {
   const blogTableContext = useContext(BlogTableContext);
+  const editModeContext = useContext(EditModeContext);
+  const blogIDContext = useContext(BlogIDContext);
 
   if (!blogTableContext) {
     throw new Error(
@@ -11,10 +13,29 @@ function BlogItemButtons({ blogID }: { blogID: string }) {
     );
   }
 
+  if (!editModeContext) {
+    throw new Error(
+      "EditModeContext must be used within an EditModeContext.Provider"
+    );
+  }
+
+  if (!blogIDContext) {
+    throw new Error(
+      "BlogIDContext must be used within a BlogIDContext.Provider"
+    );
+  }
+
+  const { setBlogID } = blogIDContext;
   const { setTableState } = blogTableContext;
+  const { setEditMode } = editModeContext;
+
+  const handleEditButton = () => {
+    setEditMode(true);
+    setBlogID(blogIDCurrent);
+  };
 
   const handleDelete = () => {
-    fetch(`http://localhost:3000/api/blog/${blogID}`, {
+    fetch(`http://localhost:3000/api/blog/${blogIDCurrent}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
     })
@@ -32,7 +53,12 @@ function BlogItemButtons({ blogID }: { blogID: string }) {
 
   return (
     <>
-      <Button className="font-base text-xl hover:underline">Edit</Button>
+      <Button
+        className="font-base text-xl hover:underline"
+        onClick={handleEditButton}
+      >
+        Edit
+      </Button>
       <Button
         className="font-base text-xl hover:underline"
         onClick={handleDelete}

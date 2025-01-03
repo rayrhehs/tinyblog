@@ -1,6 +1,7 @@
 import { createContext, useState } from "react";
 import BlogTable from "./BlogTable.tsx";
 import BlogAdd from "./BlogAdd.tsx";
+import BlogEdit from "./BlogEdit.tsx";
 import BlogView from "./BlogView.tsx";
 import HomeButton from "./HomeButton.tsx";
 import AdminButton from "./AdminButton.tsx";
@@ -36,6 +37,11 @@ type AdminModeContextType = {
   setAdminMode: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+type EditModeContextType = {
+  editMode: boolean;
+  setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
 // BlogTableContext gets passed two parameters, tableState and setTableState
 // the types for both of these need to be accounted for which is why I declare their types
 export const BlogTableContext = createContext<BlogTableContextType | null>(
@@ -53,6 +59,8 @@ export const AdminModeContext = createContext<AdminModeContextType | null>(
   null
 );
 
+export const EditModeContext = createContext<EditModeContextType | null>(null);
+
 function App() {
   const [tableState, setTableState] = useState<boolean>(false);
   const [viewState, setViewState] = useState<boolean>(false);
@@ -60,29 +68,33 @@ function App() {
   const [addOpen, setAddOpen] = useState(false);
   const [viewOpen, setViewOpen] = useState(false);
   const [adminMode, setAdminMode] = useState(false);
+  const [editMode, setEditMode] = useState(false);
 
   return (
-    <AdminModeContext.Provider value={{ adminMode, setAdminMode }}>
-      <BlogViewModalContext.Provider value={{ viewOpen, setViewOpen }}>
-        <BlogAddModalContext.Provider value={{ addOpen, setAddOpen }}>
-          <BlogTableContext.Provider value={{ tableState, setTableState }}>
-            <BlogViewContext.Provider value={{ viewState, setViewState }}>
-              <BlogIDContext.Provider value={{ blogID, setBlogID }}>
-                <HomeButton></HomeButton>
-                <div className="flex flex-col gap-6">
-                  <BlogTable></BlogTable>
-                  <AnimatePresence>
-                    {addOpen ? <BlogAdd></BlogAdd> : null}
-                    {viewOpen ? <BlogView></BlogView> : null}
-                  </AnimatePresence>
-                </div>
-                <AdminButton></AdminButton>
-              </BlogIDContext.Provider>
-            </BlogViewContext.Provider>
-          </BlogTableContext.Provider>
-        </BlogAddModalContext.Provider>
-      </BlogViewModalContext.Provider>
-    </AdminModeContext.Provider>
+    <EditModeContext.Provider value={{ editMode, setEditMode }}>
+      <AdminModeContext.Provider value={{ adminMode, setAdminMode }}>
+        <BlogViewModalContext.Provider value={{ viewOpen, setViewOpen }}>
+          <BlogAddModalContext.Provider value={{ addOpen, setAddOpen }}>
+            <BlogTableContext.Provider value={{ tableState, setTableState }}>
+              <BlogViewContext.Provider value={{ viewState, setViewState }}>
+                <BlogIDContext.Provider value={{ blogID, setBlogID }}>
+                  <HomeButton></HomeButton>
+                  <div className="flex flex-col gap-6">
+                    <BlogTable></BlogTable>
+                    <AnimatePresence>
+                      {addOpen ? <BlogAdd></BlogAdd> : null}
+                      {editMode ? <BlogEdit></BlogEdit> : null}
+                      {viewOpen ? <BlogView></BlogView> : null}
+                    </AnimatePresence>
+                  </div>
+                  <AdminButton></AdminButton>
+                </BlogIDContext.Provider>
+              </BlogViewContext.Provider>
+            </BlogTableContext.Provider>
+          </BlogAddModalContext.Provider>
+        </BlogViewModalContext.Provider>
+      </AdminModeContext.Provider>
+    </EditModeContext.Provider>
   );
 }
 
