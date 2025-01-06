@@ -26,13 +26,6 @@ export const BlogView = motion(function BlogView() {
 
   const [blogData, setBlogData] = useState<BlogType>({});
 
-  //   setFormError({
-  //     ...formError,
-  //     invalidEmail: {
-  //       ...formError.invalidEmail,
-  //       hasError: true,
-  //     },
-
   const handleView = () => {
     fetch(`http://localhost:3000/api/blog/${blogID}`, {
       method: "GET",

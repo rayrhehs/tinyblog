@@ -33,6 +33,7 @@ export const HomeButton = motion(function HomeButton() {
   const { editMode, setEditMode } = editModeContext;
   const { addOpen, setAddOpen } = blogAddModalContext;
   const { setViewOpen } = viewOpenContext;
+
   const handleHomeClick = () => {
     setViewOpen(false);
     setEditMode(false);
@@ -50,13 +51,13 @@ export const HomeButton = motion(function HomeButton() {
         damping: 10,
         x: { duration: 0.35 }, // Slide duration
         opacity: { duration: 1 }, // Fade duration
-        scale: { duration: 0.35, delay: 0.5 }, // Scale duration
+        scale: { duration: 0.15, delay: 0.2 }, // Scale duration
       }} // Smooth spring-like motion for sliding and fading
     >
       <Button
         onClick={handleHomeClick}
         variant={"outline"}
-        className="px-2 rounded-small mb-4"
+        className="w-20 rounded-small mb-4"
       >
         {addOpen || editMode ? (
           <svg
