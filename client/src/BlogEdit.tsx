@@ -3,20 +3,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "./components/ui/button";
 import { useContext, useState, useEffect } from "react";
-import {
-  BlogTableContext,
-  BlogAddModalContext,
-  EditModeContext,
-  BlogIDContext,
-} from "./App";
+import { BlogTableContext, EditModeContext, BlogIDContext } from "./App";
 import { motion } from "motion/react";
 
 const MAX_CHARS = 250;
 
-export const BlogAdd = motion(function BlogAdd() {
+export const BlogEdit = motion(function BlogEdit() {
   // add this in during home button
   const blogTableContext = useContext(BlogTableContext);
-  const blogAddModalContext = useContext(BlogAddModalContext);
   const editModeContext = useContext(EditModeContext);
   const blogIDContext = useContext(BlogIDContext);
 
@@ -24,13 +18,6 @@ export const BlogAdd = motion(function BlogAdd() {
   if (!blogTableContext) {
     throw new Error(
       "BlogTableContext must be used within a BlogTableContext.Provider"
-    );
-  }
-
-  // check to see if null -> by doing this, typescript will not complain!
-  if (!blogAddModalContext) {
-    throw new Error(
-      "BlogAddModalContext must be used within a BlogAddModalContext.Provider"
     );
   }
 
@@ -179,4 +166,4 @@ export const BlogAdd = motion(function BlogAdd() {
   );
 });
 
-export default BlogAdd;
+export default BlogEdit;

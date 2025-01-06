@@ -1,9 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { useContext } from "react";
-import { BlogViewModalContext } from "./App";
+import {
+  BlogAddModalContext,
+  BlogViewModalContext,
+  EditModeContext,
+} from "./App";
 import { motion } from "motion/react";
 
 export const HomeButton = motion(function HomeButton() {
+  const blogAddModalContext = useContext(BlogAddModalContext);
+  const editModeContext = useContext(EditModeContext);
   const viewOpenContext = useContext(BlogViewModalContext);
 
   if (!viewOpenContext) {
@@ -12,9 +18,25 @@ export const HomeButton = motion(function HomeButton() {
     );
   }
 
+  if (!blogAddModalContext) {
+    throw new Error(
+      "BlogAddModalContext must be used within a BlogAddModalContext.Provider"
+    );
+  }
+
+  if (!editModeContext) {
+    throw new Error(
+      "EditModeContext must be used within an EditModeContext.Provider"
+    );
+  }
+
+  const { editMode, setEditMode } = editModeContext;
+  const { addOpen, setAddOpen } = blogAddModalContext;
   const { setViewOpen } = viewOpenContext;
   const handleHomeClick = () => {
     setViewOpen(false);
+    setEditMode(false);
+    setAddOpen(false);
   };
 
   return (
@@ -36,18 +58,29 @@ export const HomeButton = motion(function HomeButton() {
         variant={"outline"}
         className="px-2 rounded-small mb-4"
       >
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="m18 15-6-6-6 6" />
-        </svg>
+        {addOpen || editMode ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="-6 -6 24 24"
+            width="28"
+            fill="currentColor"
+          >
+            <path d="M7.314 5.9l3.535-3.536A1 1 0 1 0 9.435.95L5.899 4.485 2.364.95A1 1 0 1 0 .95 2.364l3.535 3.535L.95 9.435a1 1 0 1 0 1.414 1.414l3.535-3.535 3.536 3.535a1 1 0 1 0 1.414-1.414L7.314 5.899z"></path>
+          </svg>
+        ) : (
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="m18 15-6-6-6 6" />
+          </svg>
+        )}
       </Button>
     </motion.div>
   );
