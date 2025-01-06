@@ -48,7 +48,7 @@ export const HomeButton = motion(function HomeButton({
 
   return (
     <motion.div
-      initial={{ x: 0, opacity: 1, scale: 0.6 }} // Start off-screen and smaller
+      initial={{ x: 0, opacity: 0.5, scale: 1 }} // Start off-screen and smaller
       animate={{ y: 0, opacity: 1, scale: 1 }} // Scale up to normal size when mounting
       exit={{ x: 0, opacity: 1, scale: 0.6 }} // Scale down when exiting
       transition={{
@@ -56,8 +56,7 @@ export const HomeButton = motion(function HomeButton({
         stiffness: 50,
         damping: 10,
         x: { duration: 0.35 }, // Slide duration
-        opacity: { duration: 1 }, // Fade duration
-        scale: { duration: 0.15, delay: 0.2 }, // Scale duration
+        opacity: { duration: 0.25 }, // Fade duration
       }} // Smooth spring-like motion for sliding and fading
     >
       <Button
