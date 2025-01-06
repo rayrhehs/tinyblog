@@ -7,7 +7,13 @@ import {
 } from "./App";
 import { motion } from "motion/react";
 
-export const HomeButton = motion(function HomeButton() {
+type AdminModeType = {
+  adminMode: boolean;
+};
+
+export const HomeButton = motion(function HomeButton({
+  adminMode,
+}: AdminModeType) {
   const blogAddModalContext = useContext(BlogAddModalContext);
   const editModeContext = useContext(EditModeContext);
   const viewOpenContext = useContext(BlogViewModalContext);
@@ -56,7 +62,7 @@ export const HomeButton = motion(function HomeButton() {
     >
       <Button
         onClick={handleHomeClick}
-        variant={"outline"}
+        variant={adminMode ? "outlineInverse" : "outline"}
         className="w-20 rounded-small mb-4"
       >
         {addOpen || editMode ? (

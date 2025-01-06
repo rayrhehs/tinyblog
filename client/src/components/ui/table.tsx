@@ -1,19 +1,34 @@
 import * as React from "react";
-
 import { cn } from "@/lib/utils";
+import { cva, type VariantProps } from "class-variance-authority";
 
-const Table = React.forwardRef<
-  HTMLTableElement,
-  React.HTMLAttributes<HTMLTableElement>
->(({ className, ...props }, ref) => (
-  <div className="relative w-full overflow-scroll">
-    <table
-      ref={ref}
-      className={cn("w-full caption-bottom text-sm text-totalblue", className)}
-      {...props}
-    />
-  </div>
-));
+const tableVariants = cva("w-full caption-bottom text-sm", {
+  variants: {
+    variant: {
+      default: "text-totalblue",
+      inverse: "text-white",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+  },
+});
+
+export interface TableProps
+  extends React.HTMLAttributes<HTMLTableElement>,
+    VariantProps<typeof tableVariants> {}
+
+const Table = React.forwardRef<HTMLTableElement, TableProps>(
+  ({ className, variant, ...props }, ref) => (
+    <div className="relative w-full overflow-scroll">
+      <table
+        ref={ref}
+        className={cn(tableVariants({ variant, className }))}
+        {...props}
+      />
+    </div>
+  )
+);
 Table.displayName = "Table";
 
 const TableHeader = React.forwardRef<
@@ -63,19 +78,34 @@ const TableRow = React.forwardRef<
 ));
 TableRow.displayName = "TableRow";
 
-const TableHead = React.forwardRef<
-  HTMLTableCellElement,
-  React.ThHTMLAttributes<HTMLTableCellElement>
->(({ className, ...props }, ref) => (
-  <th
-    ref={ref}
-    className={cn(
-      "h-12 px-4 text-left align-middle font-medium text-totalblue [&:has([role=checkbox])]:pr-0 dark:text-neutral-400",
-      className
-    )}
-    {...props}
-  />
-));
+const tableHeadVariants = cva(
+  "h-12 px-4 text-left align-middle font-medium [&:has([role=checkbox])]:pr-0",
+  {
+    variants: {
+      variant: {
+        default: "text-totalblue dark:text-neutral-400",
+        inverse: "text-white",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
+
+export interface TableHeadProps
+  extends React.ThHTMLAttributes<HTMLTableCellElement>,
+    VariantProps<typeof tableHeadVariants> {}
+
+const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
+  ({ className, variant, ...props }, ref) => (
+    <th
+      ref={ref}
+      className={cn(tableHeadVariants({ variant, className }))}
+      {...props}
+    />
+  )
+);
 TableHead.displayName = "TableHead";
 
 const TableCell = React.forwardRef<
@@ -93,16 +123,29 @@ const TableCell = React.forwardRef<
 ));
 TableCell.displayName = "TableCell";
 
+const tableCaptionVariants = cva("mt-4 text-sm", {
+  variants: {
+    variant: {
+      default: "text-neutral-500 dark:text-neutral-400",
+      inverse: "text-white",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+  },
+});
+
+export interface TableCaptionProps
+  extends React.HTMLAttributes<HTMLTableCaptionElement>,
+    VariantProps<typeof tableCaptionVariants> {}
+
 const TableCaption = React.forwardRef<
   HTMLTableCaptionElement,
-  React.HTMLAttributes<HTMLTableCaptionElement>
->(({ className, ...props }, ref) => (
+  TableCaptionProps
+>(({ className, variant, ...props }, ref) => (
   <caption
     ref={ref}
-    className={cn(
-      "mt-4 text-sm text-neutral-500 dark:text-neutral-400",
-      className
-    )}
+    className={cn(tableCaptionVariants({ variant, className }))}
     {...props}
   />
 ));

@@ -3,12 +3,18 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useState, useEffect, useContext } from "react";
-import { BlogTableContext, BlogAddModalContext, AdminModeContext } from "./App";
+import { BlogTableContext, BlogAddModalContext } from "./App";
 import Blog from "./BlogItem";
 import { motion } from "motion/react";
 import useScrollBottom from "./hooks/useScrollBottom";
 
-export const BlogTable = motion(function BlogTable() {
+type AdminModeType = {
+  adminMode: boolean;
+};
+
+export const BlogTable = motion(function BlogTable({
+  adminMode,
+}: AdminModeType) {
   // blog object types
   type BlogType = {
     _id: string;
@@ -20,7 +26,6 @@ export const BlogTable = motion(function BlogTable() {
   // this will be moved to a master component
   const blogTableContext = useContext(BlogTableContext);
   const blogAddModalContext = useContext(BlogAddModalContext);
-  const adminModeContext = useContext(AdminModeContext);
 
   // check to see if null -> by doing this, typescript will not complain!
   if (!blogTableContext) {
@@ -36,15 +41,8 @@ export const BlogTable = motion(function BlogTable() {
     );
   }
 
-  if (!adminModeContext) {
-    throw new Error(
-      "AdminModeContext must be used within a AdminModeContext.Provider"
-    );
-  }
-
   const { tableState, setTableState } = blogTableContext;
   const { setAddOpen } = blogAddModalContext;
-  // const { adminMode, setAdminMode } = adminModeContext;
 
   const [blog, setBlog] = useState([]);
 
@@ -88,8 +86,14 @@ export const BlogTable = motion(function BlogTable() {
         scale: { duration: 0.35, delay: 0.5 }, // Scale duration
       }} // Smooth spring-like motion for sliding and fading
     >
-      <Card className="px-4">
-        <div className="flex justify-between content-end text-totalblue mb-2">
+      <Card className="px-4" variant={adminMode ? "inverse" : "default"}>
+        <div
+          className={
+            adminMode
+              ? "flex justify-between content-end text-white mb-2"
+              : "flex justify-between content-end text-totalblue mb-2"
+          }
+        >
           <h1 className="px-2 text-3xl font-bold">Personal Blog</h1>
           <Button
             className="text-xl font-bold pb-0 items-start"
@@ -101,7 +105,10 @@ export const BlogTable = motion(function BlogTable() {
         </div>
         <div className="relative w-full h-104 rounded-md">
           <ScrollArea className="w-full h-full">
-            <Table className="w-full px-0">
+            <Table
+              className="w-full px-0"
+              variant={adminMode ? "inverse" : "default"}
+            >
               <TableBody>
                 {blog.map((blog: BlogType) => (
                   <Blog
@@ -113,7 +120,7 @@ export const BlogTable = motion(function BlogTable() {
               </TableBody>
             </Table>
           </ScrollArea>
-          {!isBottom ? (
+          {!isBottom && !adminMode ? (
             <div className="absolute bottom-0 left-0 right-0 h-12 pointer-events-none bg-gradient-to-t from-white via-white/90 to-transparent"></div>
           ) : null}
         </div>

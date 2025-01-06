@@ -6,7 +6,6 @@ import BlogView from "./BlogView.tsx";
 import HomeButton from "./HomeButton.tsx";
 import AdminButton from "./AdminButton.tsx";
 import { AnimatePresence } from "motion/react";
-import { Button } from "./components/ui/button.tsx";
 
 type BlogTableContextType = {
   tableState: boolean;
@@ -79,20 +78,34 @@ function App() {
             <BlogTableContext.Provider value={{ tableState, setTableState }}>
               <BlogViewContext.Provider value={{ viewState, setViewState }}>
                 <BlogIDContext.Provider value={{ blogID, setBlogID }}>
-                  {addOpen || editMode || viewOpen ? (
-                    <HomeButton></HomeButton>
-                  ) : (
-                    <div className="px-2 py-4 mb-6"></div>
-                  )}
-                  <div className="flex flex-col gap-6">
-                    <BlogTable></BlogTable>
-                    <AnimatePresence>
-                      {addOpen ? <BlogAdd></BlogAdd> : null}
-                      {editMode ? <BlogEdit></BlogEdit> : null}
-                      {viewOpen ? <BlogView></BlogView> : null}
-                    </AnimatePresence>
+                  <div
+                    className={
+                      adminMode
+                        ? "min-h-screen flex flex-col items-center justify-center bg-totalblue"
+                        : "min-h-screen flex flex-col items-center justify-center" // this code block adds and changes the background element/color
+                    }
+                  >
+                    {addOpen || editMode || viewOpen ? (
+                      <HomeButton adminMode={adminMode}></HomeButton>
+                    ) : (
+                      <div className="px-2 py-4 mb-6"></div> // divider to fill out space where the button is supposed to be
+                    )}
+                    <div className="flex flex-col gap-6">
+                      <BlogTable adminMode={adminMode}></BlogTable>
+                      <AnimatePresence>
+                        {addOpen ? (
+                          <BlogAdd adminMode={adminMode}></BlogAdd>
+                        ) : null}
+                        {editMode ? (
+                          <BlogEdit adminMode={adminMode}></BlogEdit>
+                        ) : null}
+                        {viewOpen ? (
+                          <BlogView adminMode={adminMode}></BlogView>
+                        ) : null}
+                      </AnimatePresence>
+                    </div>
+                    <AdminButton></AdminButton>
                   </div>
-                  <AdminButton></AdminButton>
                 </BlogIDContext.Provider>
               </BlogViewContext.Provider>
             </BlogTableContext.Provider>

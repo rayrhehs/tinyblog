@@ -5,7 +5,11 @@ import { useContext, useEffect, useState } from "react";
 import { BlogIDContext } from "./App";
 import { motion } from "motion/react";
 
-export const BlogView = motion(function BlogView() {
+type AdminModeType = {
+  adminMode: boolean;
+};
+
+export const BlogView = motion(function BlogView({ adminMode }: AdminModeType) {
   // blog object types
   type BlogType = {
     // question mark means its optional AKA it can wait to be populated later
@@ -63,19 +67,32 @@ export const BlogView = motion(function BlogView() {
       }}
       className={"absolute"}
     >
-      <Card className="px-4">
+      <Card className="px-4" variant={adminMode ? "inverse" : "default"}>
         <div>
-          <h1 className="text-left px-2 text-3xl font-bold text-totalblue mb-4">
+          <h1
+            className={
+              adminMode
+                ? "text-left px-2 text-3xl font-bold text-white mb-4"
+                : "text-left px-2 text-3xl font-bold text-totalblue mb-4"
+            }
+          >
             {blogData.title}
           </h1>
         </div>
         <div className="px-2 text-totalblue flex flex-col gap-3 h-72">
           <div className="text-left flex flex-col gap-2">
-            <Label htmlFor="message">{blogData.date}</Label>
+            <Label
+              htmlFor="message"
+              className={adminMode ? "text-white" : "text-totalblue"}
+            >
+              {blogData.date}
+            </Label>
           </div>
           <ScrollArea className="h-max rounded-md">
             <div className="text-left flex flex-col gap-2">
-              <p>{blogData.content}</p>
+              <p className={adminMode ? "text-white" : "text-totalblue"}>
+                {blogData.content}
+              </p>
             </div>
           </ScrollArea>
         </div>
