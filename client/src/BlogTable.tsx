@@ -12,16 +12,16 @@ type AdminModeType = {
   adminMode: boolean;
 };
 
+// blog object types
+type BlogType = {
+  _id: string;
+  title: string;
+  date: string;
+};
+
 export const BlogTable = motion(function BlogTable({
   adminMode,
 }: AdminModeType) {
-  // blog object types
-  type BlogType = {
-    _id: string;
-    title: string;
-    date: string;
-  };
-
   // save in variable then...
   // this will be moved to a master component
   const blogTableContext = useContext(BlogTableContext);

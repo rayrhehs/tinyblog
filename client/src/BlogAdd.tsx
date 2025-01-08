@@ -2,9 +2,10 @@ import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "./components/ui/button";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BlogTableContext, BlogAddModalContext } from "./App";
 import { motion } from "motion/react";
+import { useForm, Controller, FieldErrors, FieldValues } from "react-hook-form";
 
 const MAX_CHARS = 250;
 
@@ -13,6 +14,21 @@ type AdminModeType = {
 };
 
 export const BlogAdd = motion(function BlogAdd({ adminMode }: AdminModeType) {
+  const {
+    control,
+    formState: { errors },
+  } = useForm();
+
+  const handleErrors = (errors: FieldErrors<FieldValues>) => {
+    if (errors.title) {
+      console.log(errors.title);
+    }
+  };
+
+  useEffect(() => {
+    handleErrors(errors);
+  }, [errors.title]);
+
   // add this in during home button
   const blogTableContext = useContext(BlogTableContext);
   const blogAddModalContext = useContext(BlogAddModalContext);
@@ -110,14 +126,26 @@ export const BlogAdd = motion(function BlogAdd({ adminMode }: AdminModeType) {
             >
               Title
             </Label>
-            <Textarea
-              placeholder="Write your title here."
-              className="flex min-h-[45px] h-[45px] resize-none px-4"
-              id="message"
-              value={blogData.title}
-              onChange={updateBlogTitle}
-              maxLength={30}
-              variant={adminMode ? "inverse" : "default"}
+            <Controller
+              name="title"
+              control={control}
+              rules={{
+                required: { value: true, message: "Title must not be empty." },
+              }}
+              render={({ field: { onChange } }) => (
+                <Textarea
+                  placeholder="Write your title here."
+                  className="flex min-h-[45px] h-[45px] resize-none px-4"
+                  id="message"
+                  value={blogData.title}
+                  onChange={(text) => {
+                    onChange(text);
+                    updateBlogTitle(text);
+                  }}
+                  maxLength={30}
+                  variant={adminMode ? "inverse" : "default"}
+                />
+              )}
             />
           </div>
           <div className="text-left flex flex-col gap-2">
