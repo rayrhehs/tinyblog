@@ -97,14 +97,6 @@ export const BlogEdit = motion(function BlogEdit({ adminMode }: AdminModeType) {
   }, [blogData]);
 
   useEffect(() => {
-    // trigger validation on mount for both fields
-    trigger("content");
-    trigger("title");
-    // this is the shorthand version
-    // trigger(["title", "content"]);
-  }, []);
-
-  useEffect(() => {
     handleErrors(errors);
   }, [errors.title, errors.content]);
 
