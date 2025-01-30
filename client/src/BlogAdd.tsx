@@ -14,20 +14,21 @@ type AdminModeType = {
 };
 
 export const BlogAdd = motion(function BlogAdd({ adminMode }: AdminModeType) {
+  const form = useForm({
+    defaultValues: {
+      title: "",
+      content: "",
+    },
+    // mode specifies form monitoring type (default is on submit function)
+    mode: "onChange",
+  });
+
   const {
     control,
     formState: { errors },
-  } = useForm();
-
-  const handleErrors = (errors: FieldErrors<FieldValues>) => {
-    if (errors.title) {
-      console.log(errors.title);
-    }
-  };
-
-  useEffect(() => {
-    handleErrors(errors);
-  }, [errors.title]);
+    trigger,
+    watch,
+  } = form;
 
   // add this in during home button
   const blogTableContext = useContext(BlogTableContext);
@@ -52,6 +53,42 @@ export const BlogAdd = motion(function BlogAdd({ adminMode }: AdminModeType) {
     title: "",
     content: "",
   });
+  const [formFilled, setFormFilled] = useState(false);
+
+  const watchTitle = watch("title");
+  const watchContent = watch("content");
+
+  const handleErrors = (errors: any) => {
+    const hasErrors = errors.title || errors.content;
+
+    if (errors.title) {
+      console.log(errors.title);
+    } else if (errors.content) {
+      console.log(errors.content);
+    }
+
+    console.log(formFilled);
+    setFormFilled(!hasErrors);
+  };
+
+  useEffect(() => {
+    // trigger validation on mount for both fields
+    trigger("content");
+    trigger("title");
+    // this is the shorthand version
+    // trigger(["title", "content"]);
+  }, []);
+
+  useEffect(() => {
+    handleErrors(errors);
+  }, [errors.title, errors.content]);
+
+  // this will only work if i have a watcher or trigger to gather form errors from title controller - refer to emoot createMessageStep
+  useEffect(() => {
+    if (watchTitle) {
+      trigger("content");
+    }
+  }, [watchTitle, watchContent, trigger]);
 
   const updateBlogTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setBlogData({
@@ -155,14 +192,29 @@ export const BlogAdd = motion(function BlogAdd({ adminMode }: AdminModeType) {
             >
               Content
             </Label>
-            <Textarea
-              placeholder="Write your blog here."
-              className="flex h-64 resize-none p-4"
-              id="message"
-              value={blogData.content}
-              onChange={updateBlogContent}
-              maxLength={MAX_CHARS}
-              variant={adminMode ? "inverse" : "default"}
+            <Controller
+              name="content"
+              control={control}
+              rules={{
+                required: {
+                  value: true,
+                  message: "Content must not be empty.",
+                },
+              }}
+              render={({ field: { onChange } }) => (
+                <Textarea
+                  placeholder="Write your blog here."
+                  className="flex h-64 resize-none p-4"
+                  id="message"
+                  value={blogData.content}
+                  onChange={(text) => {
+                    onChange(text);
+                    updateBlogContent(text);
+                  }}
+                  maxLength={MAX_CHARS}
+                  variant={adminMode ? "inverse" : "default"}
+                />
+              )}
             />
           </div>
         </div>
@@ -176,12 +228,20 @@ export const BlogAdd = motion(function BlogAdd({ adminMode }: AdminModeType) {
           >
             {remainingChars}
           </Label>
-          <Button
-            variant={adminMode ? "outlineInverse" : "outline"}
-            onClick={handlePublish}
-          >
-            <b>Publish</b>
-          </Button>
+          {formFilled ? (
+            <Button
+              variant={adminMode ? "outlineInverse" : "outline"}
+              onClick={handlePublish}
+            >
+              <b>Publish</b>
+            </Button>
+          ) : (
+            <Button
+              variant={adminMode ? "outlineInverseDisabled" : "outlineDisabled"}
+            >
+              <b>Publish</b>
+            </Button>
+          )}
         </div>
       </Card>
     </motion.div>
