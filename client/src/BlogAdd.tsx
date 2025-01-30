@@ -5,7 +5,7 @@ import { Button } from "./components/ui/button";
 import { useContext, useEffect, useState } from "react";
 import { BlogTableContext, BlogAddModalContext } from "./App";
 import { motion } from "motion/react";
-import { useForm, Controller, FieldErrors, FieldValues } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 
 const MAX_CHARS = 250;
 
@@ -54,6 +54,7 @@ export const BlogAdd = motion(function BlogAdd({ adminMode }: AdminModeType) {
     content: "",
   });
   const [formFilled, setFormFilled] = useState(false);
+  const [currentError, setCurrentError] = useState("");
 
   const watchTitle = watch("title");
   const watchContent = watch("content");
@@ -62,8 +63,10 @@ export const BlogAdd = motion(function BlogAdd({ adminMode }: AdminModeType) {
     const hasErrors = errors.title || errors.content;
 
     if (errors.title) {
+      setCurrentError(errors.title.message);
       console.log(errors.title);
     } else if (errors.content) {
+      setCurrentError(errors.content.message);
       console.log(errors.content);
     }
 
@@ -87,6 +90,7 @@ export const BlogAdd = motion(function BlogAdd({ adminMode }: AdminModeType) {
   useEffect(() => {
     if (watchTitle) {
       trigger("content");
+      setCurrentError("");
     }
   }, [watchTitle, watchContent, trigger]);
 
@@ -226,7 +230,7 @@ export const BlogAdd = motion(function BlogAdd({ adminMode }: AdminModeType) {
                 : "text-totalblue text-md font-semibold self-center"
             }
           >
-            {remainingChars}
+            {formFilled ? remainingChars : currentError}
           </Label>
           {formFilled ? (
             <Button
