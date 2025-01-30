@@ -5,6 +5,7 @@ import { Button } from "./components/ui/button";
 import { useContext, useState, useEffect } from "react";
 import { BlogTableContext, EditModeContext, BlogIDContext } from "./App";
 import { motion } from "motion/react";
+import { useForm, Controller } from "react-hook-form";
 
 const MAX_CHARS = 250;
 
@@ -13,6 +14,23 @@ type AdminModeType = {
 };
 
 export const BlogEdit = motion(function BlogEdit({ adminMode }: AdminModeType) {
+  const form = useForm({
+    defaultValues: {
+      title: "",
+      content: "",
+    },
+    // mode specifies form monitoring type (default is on submit function)
+    mode: "onChange",
+  });
+
+  const {
+    control,
+    formState: { errors },
+    trigger,
+    watch,
+    reset,
+  } = form;
+
   // add this in during home button
   const blogTableContext = useContext(BlogTableContext);
   const editModeContext = useContext(EditModeContext);
@@ -46,6 +64,57 @@ export const BlogEdit = motion(function BlogEdit({ adminMode }: AdminModeType) {
     date: "",
     content: "",
   });
+
+  const [formFilled, setFormFilled] = useState(false);
+  const [currentError, setCurrentError] = useState("");
+
+  const watchTitle = watch("title");
+  const watchContent = watch("content");
+
+  const handleErrors = (errors: any) => {
+    const hasErrors = errors.title || errors.content;
+
+    if (errors.title) {
+      setCurrentError(errors.title.message);
+      console.log(errors.title);
+    } else if (errors.content) {
+      setCurrentError(errors.content.message);
+      console.log(errors.content);
+    }
+
+    console.log(formFilled);
+    setFormFilled(!hasErrors);
+  };
+
+  // when blogData is updated (on load), reset blogData to include fetched data = updates error handling as well
+  useEffect(() => {
+    if (blogData) {
+      reset({
+        title: blogData.title,
+        content: blogData.content,
+      });
+    }
+  }, [blogData]);
+
+  useEffect(() => {
+    // trigger validation on mount for both fields
+    trigger("content");
+    trigger("title");
+    // this is the shorthand version
+    // trigger(["title", "content"]);
+  }, []);
+
+  useEffect(() => {
+    handleErrors(errors);
+  }, [errors.title, errors.content]);
+
+  // this will only work if i have a watcher or trigger to gather form errors from title controller - refer to emoot createMessageStep
+  useEffect(() => {
+    if (watchTitle) {
+      trigger("content");
+      setCurrentError("");
+    }
+  }, [watchTitle, watchContent, trigger]);
 
   const updateBlogTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setBlogData({
@@ -147,14 +216,26 @@ export const BlogEdit = motion(function BlogEdit({ adminMode }: AdminModeType) {
             >
               Title
             </Label>
-            <Textarea
-              placeholder="Write your title here."
-              className="flex min-h-[45px] h-[45px] resize-none px-4"
-              id="message"
-              value={blogData.title}
-              onChange={updateBlogTitle}
-              maxLength={30}
-              variant={adminMode ? "inverse" : "default"}
+            <Controller
+              name="title"
+              control={control}
+              rules={{
+                required: { value: true, message: "Title must not be empty." },
+              }}
+              render={({ field: { onChange } }) => (
+                <Textarea
+                  placeholder="Write your title here."
+                  className="flex min-h-[45px] h-[45px] resize-none px-4"
+                  id="message"
+                  value={blogData.title}
+                  onChange={(text) => {
+                    onChange(text);
+                    updateBlogTitle(text);
+                  }}
+                  maxLength={30}
+                  variant={adminMode ? "inverse" : "default"}
+                />
+              )}
             />
           </div>
           <div className="text-left flex flex-col gap-2">
@@ -164,14 +245,29 @@ export const BlogEdit = motion(function BlogEdit({ adminMode }: AdminModeType) {
             >
               Content
             </Label>
-            <Textarea
-              placeholder="Write your blog here."
-              className="flex h-64 resize-none p-4"
-              id="message"
-              value={blogData.content}
-              onChange={updateBlogContent}
-              maxLength={MAX_CHARS}
-              variant={adminMode ? "inverse" : "default"}
+            <Controller
+              name="content"
+              control={control}
+              rules={{
+                required: {
+                  value: true,
+                  message: "Content must not be empty.",
+                },
+              }}
+              render={({ field: { onChange } }) => (
+                <Textarea
+                  placeholder="Write your blog here."
+                  className="flex h-64 resize-none p-4"
+                  id="message"
+                  value={blogData.content}
+                  onChange={(text) => {
+                    onChange(text);
+                    updateBlogContent(text);
+                  }}
+                  maxLength={MAX_CHARS}
+                  variant={adminMode ? "inverse" : "default"}
+                />
+              )}
             />
           </div>
         </div>
@@ -183,14 +279,22 @@ export const BlogEdit = motion(function BlogEdit({ adminMode }: AdminModeType) {
                 : "text-totalblue text-md font-semibold self-center"
             }
           >
-            {remainingChars}
+            {formFilled ? remainingChars : currentError}
           </Label>
-          <Button
-            variant={adminMode ? "outlineInverse" : "outline"}
-            onClick={handleSubmitEdit}
-          >
-            <b>Done</b>
-          </Button>
+          {formFilled ? (
+            <Button
+              variant={adminMode ? "outlineInverse" : "outline"}
+              onClick={handleSubmitEdit}
+            >
+              <b>Done</b>
+            </Button>
+          ) : (
+            <Button
+              variant={adminMode ? "outlineInverseDisabled" : "outlineDisabled"}
+            >
+              <b>Done</b>
+            </Button>
+          )}
         </div>
       </Card>
     </motion.div>
